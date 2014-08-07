@@ -260,7 +260,7 @@ AC_DEFUN([AX_PROG_LUA],
     AC_CACHE_CHECK([for $ax_display_LUA version], [ax_cv_lua_version],
       [ ax_cv_lua_version=`$LUA -e "print(_VERSION)" | \
           sed "s|^Lua \(.*\)|\1|" | \
-          grep -E -o "^@<:@0-9@:>@+\.@<:@0-9@:>@+"`
+          $ac_cv_path_EGREP -E -o "^@<:@0-9@:>@+\.@<:@0-9@:>@+"`
       ])
     AS_IF([test "x$ax_cv_lua_version" = 'x'],
       [AC_MSG_ERROR([invalid Lua version number])])
@@ -365,7 +365,7 @@ dnl =========================================================================
 AC_DEFUN([_AX_LUA_CHK_VER],
 [
   _ax_test_ver=`$1 -e "print(_VERSION)" 2>/dev/null | \
-    sed "s|^Lua \(.*\)|\1|" | grep -E -o "^@<:@0-9@:>@+\.@<:@0-9@:>@+"`
+    sed "s|^Lua \(.*\)|\1|" | $ac_cv_path_EGREP -E -o "^@<:@0-9@:>@+\.@<:@0-9@:>@+"`
   AS_IF([test "x$_ax_test_ver" = 'x'],
     [_ax_test_ver='0'])
   AX_COMPARE_VERSION([$_ax_test_ver], [ge], [$2])
@@ -492,7 +492,7 @@ int main(int argc, char ** argv)
             ],
             [ ax_cv_lua_header_version=`./conftest$EXEEXT p | \
                 sed "s|^Lua \(.*\)|\1|" | \
-                grep -E -o "^@<:@0-9@:>@+\.@<:@0-9@:>@+"`
+                $ac_cv_path_EGREP -E -o "^@<:@0-9@:>@+\.@<:@0-9@:>@+"`
             ],
             [ax_cv_lua_header_version='unknown'])
           CPPFLAGS=$_ax_lua_saved_cppflags

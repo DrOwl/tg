@@ -1224,7 +1224,13 @@ void write_binlog (void) {
   }
   
   assert (lseek (binlog_fd, binlog_pos, SEEK_SET) == binlog_pos);
-  if (flock (binlog_fd, LOCK_EX | LOCK_NB) < 0) {
+
+  struct flock lock;
+  lock.l_start = 0;
+  lock.l_len = 0;
+  lock.l_whence = SEEK_SET;
+  lock.l_type = F_WRLCK;
+  if (fcntl (binlog_fd, F_SETLK, &lock) < 0) {
     perror ("get lock");
     exit (2);
   } 
