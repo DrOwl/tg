@@ -24,7 +24,11 @@
 #include <tools.h>
 #include <assert.h>
 
-#pragma pack(push,4)
+#if defined(__sun) || defined(__sun__)
+#pragma pack(4)
+#else
+#pragma pack(push, 4)
+#endif
 #define DEFINE_TREE(X_NAME, X_TYPE, X_CMP, X_UNSET) \
 struct tree_ ## X_NAME { \
   struct tree_ ## X_NAME *left, *right;\
@@ -153,5 +157,9 @@ void tree_check_ ## X_NAME (struct tree_ ## X_NAME *T) { \
 }\
 
 #define int_cmp(a,b) ((a) - (b))
+#if defined(__sun) || defined(__sun__)
+#pragma pack()
+#else
 #pragma pack(pop)
+#endif
 #endif

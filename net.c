@@ -28,7 +28,11 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#if defined(__sun) || defined(__sun__)
+#include <fcntl.h>
+#else
 #include <sys/fcntl.h>
+#endif
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <errno.h>

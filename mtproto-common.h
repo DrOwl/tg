@@ -89,7 +89,11 @@
 #define MAX_PROTO_MESSAGE_INTS	1048576
 
 #define PACKET_BUFFER_SIZE	(16384 * 100 + 16) // temp fix
+#if defined(__sun) || defined(__sun__)
+#pragma pack(4)
+#else
 #pragma pack(push,4)
+#endif
 struct encrypted_message {
   // unencrypted header
   long long auth_key_id;
@@ -105,7 +109,11 @@ struct encrypted_message {
   int message[MAX_MESSAGE_INTS];
 };
 
+#if defined(__sun) || defined(__sun__)
+#pragma pack()
+#else
 #pragma pack(pop)
+#endif
 
 BN_CTX *BN_ctx;
 
