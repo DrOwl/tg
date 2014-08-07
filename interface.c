@@ -49,6 +49,7 @@
 #define ALLOW_MULT 1
 char *default_prompt = "> ";
 
+extern int unread_disabled;
 int unread_messages;
 int msg_num_mode;
 int alert_sound;
@@ -220,10 +221,11 @@ char *get_default_prompt (void) {
     assert (U && U->print_name);
     l += tsnprintf (buf + l, 999 - l, COLOR_RED "%.*s " COLOR_NORMAL, 100, U->print_name);
   }
-  if (unread_messages || cur_uploading_bytes || cur_downloading_bytes) {
+  if ((unread_messages && unread_disabled == 0) 
+			|| cur_uploading_bytes || cur_downloading_bytes) {
     l += tsnprintf (buf + l, 999 - l, COLOR_RED "[");
     int ok = 0;
-    if (unread_messages) {
+    if (unread_messages && unread_disabled == 0) {
       l += tsnprintf (buf + l, 999 - l, "%d unread", unread_messages);
       ok = 1;
     }
@@ -895,6 +897,7 @@ void interpreter (char *line UU) {
       "rename_contact <user> <first-name> <last-name> - tries to rename contact. If you have another device it will be a fight\n"
       "suggested_contacts - print info about contacts, you have max common friends\n"
       "visualize_key <secret_chat> - prints visualization of encryption key. You should compare it to your partner's one\n"
+      "get <param>. Possible <param> values are the same as for the set command. gets the current value\n"
       "set <param> <param-value>. Possible <param> values are:\n"
       "\tdebug_verbosity - just as it sounds. Debug verbosity\n"
       "\tlog_level - level of logging of new events. Lower is less verbose:\n"
@@ -1069,6 +1072,17 @@ void interpreter (char *line UU) {
     } else {
       printf ("Bad msg id\n");
       RET;
+    }
+  } else if (IS_WORD ("get")) {
+    command = next_token (&l);
+    if (IS_WORD ("debug_verbosity")) {
+      printf("verbosity = %d\n", verbosity);
+    } else if (IS_WORD ("log_level")) {
+      printf("log_level = %d\n", log_level);
+    } else if (IS_WORD ("msg_num")) {
+      printf("msg_num_mode = %d\n", msg_num_mode);
+    } else if (IS_WORD ("alert")) {
+      printf("alert = %d\n", alert_sound);
     }
   } else if (IS_WORD ("set")) {
     command = next_token (&l);

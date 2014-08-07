@@ -19,7 +19,10 @@
 */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+# include "config.h"
+#endif
+#ifdef USE_LUA
+# include "lua-tg.h"
 #endif
 
 #define        _FILE_OFFSET_BITS        64
@@ -140,7 +143,9 @@ static int rsa_load_public_key (const char *public_key_name) {
   pubKey = NULL;
   FILE *f = fopen (public_key_name, "r");
   if (f == NULL) {
-    logprintf ( "Couldn't open public key file: %s\n", public_key_name);
+    if (verbosity) {
+      logprintf ( "Couldn't open public key file: %s\n", public_key_name);
+    }
     return -1;
   }
   pubKey = PEM_read_RSAPublicKey (f, NULL, NULL, NULL);
@@ -1000,6 +1005,9 @@ void work_update (struct connection *c UU, long long msg_id UU) {
           printf ("%s\n", (U->user.status.online > 0) ? "online" : "offline");
           pop_color ();
           print_end ();
+          #ifdef USE_LUA
+            lua_user_status_update (&U->user, &U->user.status.online);
+          #endif
         }
       } else {
         struct user_status t;
