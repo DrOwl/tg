@@ -54,9 +54,9 @@ deploy:
   password:
     secure: JmbsfGZPPm42DB9IB0HO4IHpQ79EOv5josbt67WoQDl6LbVmiYHNF5qYT15mJJH8BkDh3V2YfZALv6klwubcDBna3G9eLr6n0cuFxyCjcjRinbyKlBLBGuKJ/czRPtPTRP2RCUFS6YTqUEN22ZpTZntolh3seN/9i7JAW2ZXNrg=
   app: tg
-  domain: koter84
+  domain: DrOwl
   on:
-    repo: koter84/tg
+    repo: DrOwl/tg
     all_branches: true
     condition: "${CC} = gcc"
     condition: "${TRAVIS_ARCH} = amd64"
